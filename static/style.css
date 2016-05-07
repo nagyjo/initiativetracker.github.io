@@ -1,0 +1,14 @@
+.menu.top {
+  display:inline;
+}
+.wrapper{
+    max-width: 640px;
+    margin: 0 auto;
+}
+button{
+  width: 100%;
+}
+
+.active {
+  background: gray !important;
+}

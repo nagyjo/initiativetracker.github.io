@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="none">
+    <meta name="expires" content="Fri, 31 Dec 9999 23:59:59 GMT">
+    <title>D&D initiative tracker</title>
+
+    <!-- CDN includes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.2/lodash.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+    <script src="static/mm-foundation-tpls-0.8.0.min.js"></script>
+  </head>
+
+  <body data-ng-app="initiativeTracker" data-ng-controller="initiativeCtrl">
+  <div class="wrapper">
+    <div class="menu top row">
+      <div class="button-wrapper small-4 column">
+        <button type="button" data-ng-click="showCharacterForm()"><i class="fi-plus"></i></button>
+      </div>
+      <div class="button-wrapper small-4 column">
+        <button type="button" data-ng-click="changeRollType()">{{ rollVariations[rollType]['name'] }}</button>
+      </div>
+      <div class="button-wrapper small-4 column">
+        <button type="button" data-ng-click="roll(rollType);"><i class="fi-die-five"></i></button>
+      </div>
+    </div>
+
+    <div class="scrollable">
+      <table>
+        <tr data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
+          <td>{{ character.uniqueName ? '' : '(#' + character.id + ')' }}{{ character.name }} ({{ character.initiation }})</td>
+          <td><i class="fi-shield"></i>{{ character.defense }}</td>
+          <td><i class="fi-heart"></i>{{ character.health }}</td>
+          <td data-ng-click="remove(character.id);"><i class="fi-x"></i></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="menu bottom row">
+      <div id="counter" class="small-6 column"></div>
+      <button id="next-button" type="button" data-ng-click="next()" class="small-6 column" data-ng-disabled="!enableNext">Next</button>
+    </div>
+  </div>
+
+    <!-- Templates -->
+    <script type="text/ng-template" id="addCharacterForm.html">
+      <form name="characterForm" id="characterForm">
+        <div class="message info">{{ message }}</div>
+        Name: <input name="nameField" type="text" data-ng-model="character.name" ng-minlength="1" required>
+        Base initiation: <input type="number" data-ng-model="character.base_initiation">
+        Health: <input type="number" data-ng-model="character.health">
+        Defense: <input type="number" data-ng-model="character.defense">
+        <div class="label-wrapper">
+          <label>NPC?</label> <input type="checkbox" data-ng-model="character.npc" checked="checked">
+        </div>
+
+        <input type="button" value="Add" data-ng-click="add()">
+        <input type="button" value="Done" data-ng-click="done()">
+      </form>
+    </script>
+
+    <script type="text/ng-template" id="pickRollType.html">
+      <div data-ng-repeat="(key, data) in variations">
+        <button type="button" data-ng-click="pick(key)">{{ data.name }}</button>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="readInitiation.html">
+      {{ character.name }} rolled initiation:
+      <input type="number" data-ng-model="character.rolled_initiation">
+      <input type="button" value="Done" data-ng-click="done()">
+    </script>
+
+    <!-- Custom includes -->
+    <script src="static/character.js"></script>
+    <script src="static/app.js"></script>
+  </body>
+</html>
