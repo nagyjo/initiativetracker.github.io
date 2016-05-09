@@ -56,8 +56,6 @@
 		_.remove(this.characters, function(obj) {
 			return obj.id == id;
 		});
-
-		this.order();
 	}
 
 	CharacterCollection.prototype.next = function() {
