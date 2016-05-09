@@ -12,3 +12,11 @@ button{
 .active {
   background: gray !important;
 }
+
+#characters {
+	width: 100%;
+}
+
+.button-wrapper {
+	padding: 2px;
+}

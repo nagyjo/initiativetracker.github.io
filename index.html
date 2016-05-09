@@ -19,19 +19,19 @@
   <body data-ng-app="initiativeTracker" data-ng-controller="initiativeCtrl">
   <div class="wrapper">
     <div class="menu top row">
-      <div class="button-wrapper small-4 column">
+      <div class="button-wrapper small-2 column">
         <button type="button" data-ng-click="showCharacterForm()"><i class="fi-plus"></i></button>
       </div>
-      <div class="button-wrapper small-4 column">
+      <div class="button-wrapper small-8 column">
         <button type="button" data-ng-click="changeRollType()">{{ rollVariations[rollType]['name'] }}</button>
       </div>
-      <div class="button-wrapper small-4 column">
+      <div class="button-wrapper small-2 column">
         <button type="button" data-ng-click="roll(rollType);"><i class="fi-die-five"></i></button>
       </div>
     </div>
 
     <div class="scrollable">
-      <table>
+      <table id="characters">
         <tr data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
           <td>{{ character.uniqueName ? '' : '(#' + character.id + ')' }}{{ character.name }} ({{ character.initiation }})</td>
           <td><i class="fi-shield"></i>{{ character.defense }}</td>
