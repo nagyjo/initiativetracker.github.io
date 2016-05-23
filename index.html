@@ -51,16 +51,19 @@
     <script type="text/ng-template" id="addCharacterForm.html">
       <form name="characterForm" id="characterForm">
         <div class="message info">{{ message }}</div>
-        Name: <input name="nameField" type="text" data-ng-model="character.name" ng-minlength="1" required>
-        Base initiation: <input type="number" data-ng-model="character.base_initiation">
-        Health: <input type="number" data-ng-model="character.health">
-        Defense: <input type="number" data-ng-model="character.defense">
-        <div class="label-wrapper">
-          <label>NPC?</label> <input type="checkbox" data-ng-model="character.npc" checked="checked">
+        <label>Name:</label> <input name="nameField" type="text" data-ng-model="character.name" ng-minlength="1" onClick="this.select();" required>
+        Base initiation: <input type="number" data-ng-model="character.base_initiation" onClick="this.select();">
+        Health: <input type="number" data-ng-model="character.health" onClick="this.select();">
+        Defense: <input type="number" data-ng-model="character.defense" onClick="this.select();">
+        <div class="label-wrapper" data-ng-click="character.npc = !character.npc">
+          <input type="checkbox" data-ng-model="character.npc" checked="checked"><label>NPC?</label>
         </div>
-
-        <input type="button" value="Add" data-ng-click="add()">
-        <input type="button" value="Done" data-ng-click="done()">
+        <div class="small-6 column">
+         <button type="Submit" data-ng-click="add()">Add</button>
+        </div>
+        <div class="small-6 column">
+          <button type="button" data-ng-click="done()">Done</button>
+        </div>
       </form>
     </script>
 
@@ -71,9 +74,11 @@
     </script>
 
     <script type="text/ng-template" id="readInitiation.html">
-      {{ character.name }} rolled initiation:
-      <input type="number" data-ng-model="character.rolled_initiation">
-      <input type="button" value="Done" data-ng-click="done()">
+      <form>
+        (#{{ character.id }}){{ character.name }} rolled initiation:
+        <input type="number" data-ng-model="character.rolled_initiation" onClick="this.select();" autofocus>
+        <button class="small-12 column" type="Submit" data-ng-click="done()">Done</button>
+      </form>
     </script>
 
     <!-- Custom includes -->

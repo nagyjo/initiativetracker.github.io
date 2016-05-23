@@ -12,9 +12,7 @@
 
 		// Read every character input
 		$scope.inputAll = function() {
-			_.each(collection.characters, function(obj){
-				readInitiation(obj);
-			});
+			readInitiation(collection.characters);
 		}
 
 		// Generate random to NPC, read others
@@ -22,9 +20,7 @@
 			collection.randomNPC();
 			collection.order();
 
-			_.each(_.filter(collection.characters, {'npc': false}), function(obj) {
-				readInitiation(obj);
-			});
+			readInitiation(_.filter(collection.characters, {'npc': false}));
 		}
 
 		// Generate random to all character
@@ -110,21 +106,30 @@
 			collection.remove(id);
 		}
 
-		// Modal windows
-		var readInitiation = function(character) {
-			var modalInstance = $modal.open({
-				templateUrl: 'readInitiation.html',
-				controller: 'readInitiationCtrl',
-				resolve : {
-					character: function() {
-						return character;
-					},
-				}
-			});
+		var readInitiation = function(characters) {
+			if (!characters.length)
+				return;
 
-			modalInstance.result.then(function(initiationValue) {
-				collection.order();
-			});
+			read(characters, 0);
+
+			function read(characters, index) {
+				var modalInstance = $modal.open({
+					templateUrl: 'readInitiation.html',
+					controller: 'readInitiationCtrl',
+					resolve : {
+						character: function() {
+							return characters[index];
+						},
+					}
+				});
+
+				modalInstance.result.then(function(initiationValue) {
+					if (characters.length > ++index)
+						read(characters, index);
+					else
+						collection.order();
+				});
+			}
 		}
 
 		$scope.changeRollType = function() {
@@ -163,6 +168,9 @@
 	app.controller('readInitiationCtrl', function($scope, $modalInstance, character){
 		$scope.character = character;
 
+		$scope.focusElement = function() {
+		}
+
 		$scope.done = function() {
 			$modalInstance.close($scope.character);
 		}
@@ -181,10 +189,10 @@
 	app.controller('addCharacterCtrl', function($scope, $modalInstance){
 
 		$scope.characters = [];
-		$scope.character = {};
+		$scope.character = undefined;
 		$scope.message = '';
 		$scope.defaults = {
-          'name': '',
+          'name': 'Unknown',
           'base_initiation': 0,
           'rolled_initiation': 0,
           'initiation': 0,        // base_initiation + rolled_initiation
@@ -198,17 +206,14 @@
 		$scope.add = function() {
 			if ($scope.character.name == ''){
 				$scope.message = 'Character name required!';
-				$scope.reset();
 				return;
 			}
 
 			$scope.characters.push(angular.copy($scope.character));
-			$scope.message = 'Character added: ' + $scope.character.name;
-			$scope.reset();
+			$scope.message = 'Character added: ' + $scope.character.name + ' (' + $scope.characters.length + ' characters)';
 		}
 
 		$scope.done = function() {
-			$scope.add();
 			$scope.close();
 		}
 
@@ -216,17 +221,9 @@
 			$modalInstance.close($scope.characters);
 		}
 
-		$scope.reset = function() {
-			_.each($scope.defaults, function(value, key) { $scope.character[key] = value; });
-		}
-
-		$scope.error = function() {
-			$scope.reset();
-		}
-
-		// Controller initialization
 		var init = function() {
-			$scope.reset();
+			if (_.isUndefined($scope.character))
+				$scope.character = angular.copy($scope.defaults);
 		}
 
 		init();
