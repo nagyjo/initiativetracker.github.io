@@ -101,9 +101,14 @@
 		}
 
 		$scope.remove = function(id) {
-			if (_.find(collection.characters, {'id': id}).active)
+			var character = _.find(collection.characters, {'id': id});
+			if (character.active)
 				$scope.next();
-			collection.remove(id);
+
+
+			var text = 'Would you like to delete this character: (#' + character.id + ') ' + character.name + '?';
+			if (confirm(text))
+				collection.remove(id);
 		}
 
 		var readInitiation = function(characters) {

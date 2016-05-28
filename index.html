@@ -51,12 +51,12 @@
     <script type="text/ng-template" id="addCharacterForm.html">
       <form name="characterForm" id="characterForm">
         <div class="message info">{{ message }}</div>
-        <label>Name:</label> <input name="nameField" type="text" data-ng-model="character.name" ng-minlength="1" onClick="this.select();" required>
+        <label>Name:</label> <input name="nameField" type="text" data-ng-model="character.name" ng-minlength="1" onFocus="this.select();" required autoFocus>
         Base initiation: <input type="number" data-ng-model="character.base_initiation" onClick="this.select();">
         Health: <input type="number" data-ng-model="character.health" onClick="this.select();">
         Defense: <input type="number" data-ng-model="character.defense" onClick="this.select();">
         <div class="label-wrapper" data-ng-click="character.npc = !character.npc">
-          <input type="checkbox" data-ng-model="character.npc" checked="checked"><label>NPC?</label>
+          <input type="checkbox" data-ng-click="character.npc = !character.npc" data-ng-model="character.npc" checked="checked"><label>NPC?</label>
         </div>
         <div class="small-6 column">
          <button type="Submit" data-ng-click="add()">Add</button>
@@ -76,7 +76,7 @@
     <script type="text/ng-template" id="readInitiation.html">
       <form>
         (#{{ character.id }}){{ character.name }} rolled initiation:
-        <input type="number" data-ng-model="character.rolled_initiation" onClick="this.select();" autofocus>
+        <input type="number" data-ng-model="character.rolled_initiation" onFocus="this.select();" autofocus>
         <button class="small-12 column" type="Submit" data-ng-click="done()">Done</button>
       </form>
     </script>
