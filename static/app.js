@@ -33,17 +33,20 @@
 		$scope.rollType = 2;
 		$scope.rollVariations = {
 			1: {
-				'name': 'Read all input',
+				'name': 'Read All',
+				'hint': 'Read every character initiation by input.',
 				'func': $scope.inputAll,
 			},
 
 			2: {
-				'name': 'Random to NPC',
+				'name': 'Read Players',
+				'hint': 'Read player characters initiation, by input, random to NPCs.',
 				'func': $scope.randomNPC,
 			},
 
 			3: {
-				'name': 'Random to All',
+				'name': 'Random All',
+				'hint': 'Generate random to every character.',
 				'func': $scope.randomAll,
 			},
 		};
@@ -109,6 +112,20 @@
 			var text = 'Would you like to delete this character: (#' + character.id + ') ' + character.name + '?';
 			if (confirm(text))
 				collection.remove(id);
+		}
+
+		$scope.modifyHealth = function(characterId) {
+			var character = _.find(collection.characters, {'id': characterId});
+
+			var modalInstance = $modal.open({
+				templateUrl: 'healthModification.html',
+				controller: 'healthModificationCtrl',
+				resolve: {
+					character: function() {
+						return character;
+					}
+				}
+			});
 		}
 
 		var readInitiation = function(characters) {
@@ -233,5 +250,16 @@
 
 		init();
 	});
+
+	app.controller('healthModificationCtrl', function($scope, $modalInstance, character){
+		$scope.character = character;
+
+		$scope.change = 0;
+
+		$scope.done = function(change) {
+			$scope.character.health -= change;
+			$modalInstance.close($scope.character);
+		}
+	})
 
 })();

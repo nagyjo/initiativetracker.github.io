@@ -20,3 +20,11 @@ button{
 .button-wrapper {
 	padding: 2px;
 }
+
+.roll-type-variation {
+	margin-bottom: 20px;
+}
+
+.roll-type-button {
+	margin-bottom: 0px;
+}

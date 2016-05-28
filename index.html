@@ -35,7 +35,7 @@
         <tr data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
           <td>{{ character.uniqueName ? '' : '(#' + character.id + ')' }}{{ character.name }} ({{ character.initiation }})</td>
           <td><i class="fi-shield"></i>{{ character.defense }}</td>
-          <td><i class="fi-heart"></i>{{ character.health }}</td>
+          <td data-ng-click="modifyHealth(character.id);"><i class="fi-heart"></i>{{ character.health }}</td>
           <td data-ng-click="remove(character.id);"><i class="fi-x"></i></td>
         </tr>
       </table>
@@ -69,7 +69,10 @@
 
     <script type="text/ng-template" id="pickRollType.html">
       <div data-ng-repeat="(key, data) in variations">
-        <button type="button" data-ng-click="pick(key)">{{ data.name }}</button>
+        <div class="roll-type-variation">
+          <button class="roll-type-button" type="button" data-ng-click="pick(key)">{{ data.name }}</button>
+          <span>Hint: {{ data.hint }}</span>
+        </div>
       </div>
     </script>
 
@@ -78,6 +81,14 @@
         (#{{ character.id }}){{ character.name }} rolled initiation:
         <input type="number" data-ng-model="character.rolled_initiation" onFocus="this.select();" autofocus>
         <button class="small-12 column" type="Submit" data-ng-click="done()">Done</button>
+      </form>
+    </script>
+
+    <script type="text/ng-template" id="healthModification.html">
+      <form>
+        (#{{ character.id }}){{ character.name }} health change (negative if healed) (current: {{ character.health }}):
+        <input type="number" data-ng-model="change" onFocus="this.select();" autofocus>
+        <button class="small-12 column" type="Submit" data-ng-click="done(change)">Done</button>
       </form>
     </script>
 
