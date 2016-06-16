@@ -1,16 +1,26 @@
 .menu.top {
-  display:inline;
+	display:inline;
+	height: 10vh;
+	display: table;
+	width: 100%;
+}
+.menu.top button{
+	height: 10vh;
 }
 .wrapper{
-    max-width: 640px;
-    margin: 0 auto;
+	max-width: 640px;
+	margin: 0 auto;
+	height: 100vh;
 }
 button{
-  width: 100%;
+	width: 100%;
+	min-height: 50px;
+	margin: 0!important;
+	padding:0;
 }
 
 .active {
-  background: gray !important;
+	background: gray !important;
 }
 
 #characters {
@@ -21,10 +31,46 @@ button{
 	padding: 2px;
 }
 
-.roll-type-variation {
-	margin-bottom: 20px;
+.scrollable{
+	overflow-y: auto;
+	height: 78vh;
+	border: solid 1px #ddd;
 }
-
-.roll-type-button {
-	margin-bottom: 0px;
+.menu.bottom{
+	height: 10vh!important;
+	padding: 1px;
+}
+#next-button{
+	height: 10vh;
+	background-color:#008CBA!important;
+}
+table{
+	margin-bottom:0;
+	border:0;
+}
+i{
+	display: block;
+	font-size: 16px;
+}
+table tr td:first-child{
+	text-align: left;
+}
+table tr td{
+	text-align: center;
+}
+.reveal-modal{
+	padding: 25px 20px!important;
+}
+#counter{
+	height: 10vh;
+	text-align: center;
+	vertical-align: middle;
+	display: table;
+	padding: 12px;
+}
+table tr.active{
+	background: #18647D!important;
+}
+table tr.active td{
+	color: white;
 }
