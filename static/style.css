@@ -27,6 +27,10 @@ button{
 	width: 100%;
 }
 
+#charactersInAreaDamage {
+	width: 100%;
+}
+
 .button-wrapper {
 	padding: 2px;
 }
@@ -73,4 +77,10 @@ table tr.active{
 }
 table tr.active td{
 	color: white;
+}
+.medium-height {
+	height: 45vh;
+}
+.medium-margin-top {
+	margin-top: 10px;
 }

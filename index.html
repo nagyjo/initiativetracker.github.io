@@ -22,7 +22,10 @@
       <div class="button-wrapper small-2 column">
         <button type="button" data-ng-click="showCharacterForm()"><i class="fi-plus"></i></button>
       </div>
-      <div class="button-wrapper small-8 column">
+      <div class="button-wrapper small-4 column">
+        <button type="button" data-ng-click="showAreaDamageForm()">Setup Area Damage</button>
+      </div>
+      <div class="button-wrapper small-4 column">
         <button type="button" data-ng-click="changeRollType()">{{ rollVariations[rollType]['name'] }}</button>
       </div>
       <div class="button-wrapper small-2 column">
@@ -63,6 +66,37 @@
         </div>
         <div class="small-6 column">
           <button type="button" data-ng-click="done()">Done</button>
+        </div>
+      </form>
+    </script>
+
+    <script type="text/ng-template" id="setupAreaDamageForm.html">
+      <form name="areaDamageForm" id="areaDamageForm">
+        Health change (negative if healed):
+        <input type="number" data-ng-model="areaDamage" onFocus="this.select();" autofocus>
+
+        <div class="scrollable medium-height">
+          <table id="charactersInAreaDamage">
+            <tr data-ng-repeat="character in cloneCharacters">
+              <td>{{ character.uniqueName ? '' : '(#' + character.id + ')' }}{{ character.name }} ({{ character.initiation }})</td>
+              <td>
+                <div class="label-wrapper" data-ng-click="toggleDamaged(character)">
+                  <input type="checkbox" data-ng-click="toggleDamaged(character)" data-ng-model="character.damaged"><label>Damaged?</label>
+                </div>
+              </td>
+              <td>
+                <div class="label-wrapper" data-ng-click="toggleDamageHalved(character)" data-ng-disabled="!character.damaged">
+                  <input type="checkbox" data-ng-disabled="!character.damaged" data-ng-click="toggleDamageHalved(character)" data-ng-model="character.damageHalved"><label>Halved Damage?</label>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="small-6 column medium-margin-top">
+          <button type="button" data-ng-click="done(areaDamage)">Done</button>
+        </div>
+        <div class="small-6 column medium-margin-top">
+          <button type="button" data-ng-click="cancel()">Cancel</button>
         </div>
       </form>
     </script>
