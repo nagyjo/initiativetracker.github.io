@@ -171,6 +171,22 @@
 			});
 		}
 
+		$scope.showAreaDamageForm = function() {
+			var modalInstance = $modal.open({
+				templateUrl: 'setupAreaDamageForm.html',
+				controller: 'areaHealthModificationCtrl',
+				resolve: {
+					characters: function() {
+						return $scope.getCharacters();
+					}
+				}
+			});
+
+			modalInstance.result.then(function() {
+
+			});
+		}
+
 		$scope.showCharacterForm = function() {
 
 			var modalInstance = $modal.open({
@@ -259,6 +275,42 @@
 		$scope.done = function(change) {
 			$scope.character.health -= change;
 			$modalInstance.close($scope.character);
+		}
+	})
+
+	app.controller('areaHealthModificationCtrl', function($scope, $modalInstance, characters){
+		$scope.areaDamage = 0;
+
+		$scope.characters = characters;
+		$scope.cloneCharacters = angular.copy(characters);
+
+		$scope.toggleDamaged = function (cloneCharacter) {
+			cloneCharacter.damaged = !cloneCharacter.damaged;
+			cloneCharacter.damageHalved = false;
+		};
+
+		$scope.toggleDamageHalved = function (cloneCharacter) {
+			if(cloneCharacter.damaged) {
+				cloneCharacter.damageHalved = !cloneCharacter.damageHalved;
+			}
+		};
+
+		$scope.done = function(areaDamage) {
+			$scope.cloneCharacters.forEach(function (cloneCharacter) {
+				var character = _.find($scope.characters, {'id': cloneCharacter.id});
+
+				if(character && cloneCharacter.damaged) {
+					cloneCharacter.damageHalved ?
+						character.health -= Math.floor(areaDamage /2) :
+						character.health -= areaDamage;
+				}
+			});
+
+			$modalInstance.close();
+		};
+
+		$scope.cancel = function() {
+			$modalInstance.close();
 		}
 	})
 
