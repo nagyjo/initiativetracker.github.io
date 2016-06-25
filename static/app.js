@@ -58,31 +58,39 @@
 		}
 
 		$scope.next = function() {
-			console.log('next');
 			collection.next();
 			startTimer();
+			resetTime();
 		}
 
-		var resetTimer = function() {
-			setTime('0:00');
+		// Counter functions
+		var startTimer = function() {
+			$scope.counting = true;
+		}
+
+		var resetTime = function() {
+			$scope.timePassed = 0;
 		}
 
 		var updateTimer = function() {
-			var currentTime = new Date().getTime();
-			var elapsedTime = Math.round((currentTime - $scope.startTime) / 1000);
+			if (!$scope.counting)
+				return;
 
-			var elapsedTimeString = '';
+			$scope.timePassed++;
 
 			var formatSeconds = function(seconds) {
 				return (seconds < 10) ?  '0' + seconds : seconds;
 			}
 
-			if (elapsedTime < 60) {
-				elapsedTimeString = '0:' + formatSeconds(elapsedTime);
+			var elsapedTime = $scope.timePassed;
+			var elapsedTimeString = '';
+
+			if ($scope.timePassed < 60) {
+				elapsedTimeString = '0:' + formatSeconds(elsapedTime);
 			}
 			else {
-				var minutes = Math.floor(elapsedTime / 60);
-				var seconds = elapsedTime % 60;
+				var minutes = Math.floor(elsapedTime / 60);
+				var seconds = elsapedTime % 60;
 
 				elapsedTimeString = minutes + ':' + formatSeconds(seconds);
 			}
@@ -94,14 +102,14 @@
 			document.getElementById('counter').innerHTML = timeString;
 		}
 
-		var startTimer = function() {
-			if (!_.isUndefined($scope.timer))
-				clearInterval($scope.timer);
-
-			resetTimer();
-			$scope.startTime = new Date().getTime();
-			$scope.timer = setInterval(updateTimer, 1000);
+		var initTimer = function() {
+			$scope.counting = false;
+			resetTime();
+			setInterval(updateTimer, 1000);
 		}
+
+		initTimer();
+		// Counter functions end
 
 		$scope.remove = function(id) {
 			var character = _.find(collection.characters, {'id': id});
