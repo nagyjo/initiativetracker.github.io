@@ -14,10 +14,17 @@
 		this.npc = obj['npc'];
 		this.name = obj['name'] || '';
 		this.uniqueName = true;
+		this.displayName = '';
 	}
 
 	Character.prototype.set = function(key, value) {
 		this[key] = value;
+	}
+
+	Character.prototype.setDisplayName = function() {
+		var prefix = this.uniqueName ? '' : '(#' + this.id + ')';
+
+		this.displayName = prefix + this.name;
 	}
 
 	Character.prototype.random = function() {
@@ -78,7 +85,7 @@
 			next.startTurn();
 	}
 
-	// Set the uniqueName in each character
+	// Set the displayName in each character
 	CharacterCollection.prototype.uniqueName = function(obj) {
 		var names = _.uniq(_.map(this.characters, 'name'));
 
@@ -88,6 +95,8 @@
 			if (occurences.length != 1)
 				_.each(occurences, function(obj) { obj.set('uniqueName', false); });
 		});
+
+		_.each(c, function(character){character.setDisplayName();});
 	}
 
 	CharacterCollection.prototype.resetOrder = function() {
