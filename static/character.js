@@ -83,6 +83,8 @@
 
 		if (!_.isUndefined(next))
 			next.startTurn();
+
+		return next;
 	}
 
 	// Set the displayName in each character

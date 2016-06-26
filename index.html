@@ -35,7 +35,7 @@
 
     <div class="scrollable">
       <table id="characters">
-        <tr data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
+        <tr id="character-{{ character.id }}" data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
           <td>{{ character.displayName }}</td>
           <td><i class="fi-shield"></i>{{ character.defense }}</td>
           <td data-ng-click="modifyHealth(character.id);"><i class="fi-heart"></i>{{ character.health }}</td>

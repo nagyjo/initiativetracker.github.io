@@ -2,7 +2,7 @@
 (function() {
 	var app = angular.module('initiativeTracker', ['mm.foundation']);
 
-	app.controller('initiativeCtrl', function($scope, $modal) {
+	app.controller('initiativeCtrl', function($scope, $modal, $location, $anchorScroll) {
 		// Private collection
 		var collection = new CharacterCollection();
 		// List of characters
@@ -58,7 +58,10 @@
 		}
 
 		$scope.next = function() {
-			collection.next();
+			var nextCharacter = collection.next();
+			var nextNodeId = 'character-' + nextCharacter.id;
+			$location.hash(nextNodeId);
+			$anchorScroll();
 			startTimer();
 			resetTime();
 		}
