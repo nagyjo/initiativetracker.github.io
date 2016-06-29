@@ -35,8 +35,8 @@
 
     <div class="scrollable">
       <table id="characters">
-        <tr data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
-          <td>{{ character.uniqueName ? '' : '(#' + character.id + ')' }}{{ character.name }} ({{ character.initiation }})</td>
+        <tr id="character-{{ character.id }}" data-ng-repeat="character in getCharacters() | orderBy: 'initiation_order'" data-ng-class="character.active ? 'active' : '';">
+          <td>{{ character.displayName }}</td>
           <td><i class="fi-shield"></i>{{ character.defense }}</td>
           <td data-ng-click="modifyHealth(character.id);"><i class="fi-heart"></i>{{ character.health }}</td>
           <td data-ng-click="remove(character.id);"><i class="fi-x"></i></td>
@@ -45,7 +45,7 @@
     </div>
 
     <div class="menu bottom row">
-      <div id="counter" class="small-6 column"></div>
+      <div id="counter" class="small-6 column" data-ng-click="counting = !counting"></div>
       <button id="next-button" type="button" data-ng-click="next()" class="small-6 column" data-ng-disabled="!enableNext">Next</button>
     </div>
   </div>
@@ -78,7 +78,7 @@
         <div class="scrollable medium-height">
           <table id="charactersInAreaDamage">
             <tr data-ng-repeat="character in cloneCharacters">
-              <td>{{ character.uniqueName ? '' : '(#' + character.id + ')' }}{{ character.name }} ({{ character.initiation }})</td>
+              <td>{{ character.displayName }}</td>
               <td>
                 <div class="label-wrapper" data-ng-click="toggleDamaged(character)">
                   <input type="checkbox" data-ng-click="toggleDamaged(character)" data-ng-model="character.damaged"><label>Damaged?</label>
@@ -112,7 +112,7 @@
 
     <script type="text/ng-template" id="readInitiation.html">
       <form>
-        (#{{ character.id }}){{ character.name }} rolled initiation:
+        {{ character.displayName }} rolled initiation:
         <input type="number" data-ng-model="character.rolled_initiation" onFocus="this.select();" autofocus>
         <button class="small-12 column" type="Submit" data-ng-click="done()">Done</button>
       </form>
@@ -120,7 +120,7 @@
 
     <script type="text/ng-template" id="healthModification.html">
       <form>
-        (#{{ character.id }}){{ character.name }} health change (negative if healed) (current: {{ character.health }}):
+        {{ character.displayName }} health change (negative if healed) (current: {{ character.health }}):
         <input type="number" data-ng-model="change" onFocus="this.select();" autofocus>
         <button class="small-12 column" type="Submit" data-ng-click="done(change)">Done</button>
       </form>
