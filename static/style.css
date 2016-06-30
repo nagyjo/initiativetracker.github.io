@@ -27,8 +27,18 @@ button{
 	width: 100%;
 }
 
-#charactersInAreaDamage {
+.charactersInAreaDamage {
 	width: 100%;
+}
+
+.charactersInAreaDamage th {
+	background-color: #008CBA;
+}
+
+.charactersInAreaDamage .radioWithLabel {
+	position: relative;
+	top: 2px;
+	right: 5px;
 }
 
 .button-wrapper {

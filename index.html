@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="static/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.11.2/lodash.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.min.js"></script>
     <script src="static/mm-foundation-tpls-0.8.0.min.js"></script>
   </head>
 
@@ -76,21 +77,30 @@
         <input type="number" data-ng-model="areaDamage" onFocus="this.select();" autofocus>
 
         <div class="scrollable medium-height">
-          <table id="charactersInAreaDamage">
-            <tr data-ng-repeat="character in cloneCharacters">
-              <td>{{ character.displayName }}</td>
-              <td>
-                <div class="label-wrapper" data-ng-click="toggleDamaged(character)">
-                  <input type="checkbox" data-ng-click="toggleDamaged(character)" data-ng-model="character.damaged"><label>Damaged?</label>
-                </div>
-              </td>
-              <td>
-                <div class="label-wrapper" data-ng-click="toggleDamageHalved(character)" data-ng-disabled="!character.damaged">
-                  <input type="checkbox" data-ng-disabled="!character.damaged" data-ng-click="toggleDamageHalved(character)" data-ng-model="character.damageHalved"><label>Halved Damage?</label>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <div data-ng-repeat="(key, value) in (cloneCharacters | groupBy: 'npc')">
+              <table class="charactersInAreaDamage">
+                <thead data-ng-click="toggleVisibility($event)">
+                  <tr>
+                    <th colspan="4">{{ getAreaDamageContentLabel(key) }}</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr data-ng-repeat="character in value">
+                    <td>{{ character.displayName }}</td>
+                    <td>
+                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="no">Damage Ignored?</label>
+                    </td>
+                    <td>
+                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="half">Damaged Halved?</label>
+                    </td>
+                    <td>
+                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="full">Damage Completed?</label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
         </div>
         <div class="small-6 column medium-margin-top">
           <button type="button" data-ng-click="done(areaDamage)">Done</button>

@@ -1,6 +1,9 @@
-;
 (function() {
-	var app = angular.module('initiativeTracker', ['mm.foundation']);
+	window.onbeforeunload = function(){
+		return 'Are you sure you want to leave?';
+	};
+
+	var app = angular.module('initiativeTracker', ['mm.foundation', 'angular.filter']);
 
 	app.controller('initiativeCtrl', function($scope, $modal, $location, $anchorScroll) {
 		// Private collection
@@ -8,12 +11,12 @@
 		// List of characters
 		$scope.getCharacters = function() {
 			return collection.characters;
-		}
+		};
 
 		// Read every character input
 		$scope.inputAll = function() {
 			readInitiation(collection.characters);
-		}
+		};
 
 		// Generate random to NPC, read others
 		$scope.randomNPC = function() {
@@ -21,13 +24,13 @@
 			collection.order();
 
 			readInitiation(_.filter(collection.characters, {'npc': false}));
-		}
+		};
 
 		// Generate random to all character
 		$scope.randomAll = function () {
 			collection.randomAll();
 			collection.order();
-		}
+		};
 
 		$scope.enableNext = false;
 		$scope.rollType = 2;
@@ -35,27 +38,27 @@
 			1: {
 				'name': 'Read All',
 				'hint': 'Read every character initiation by input.',
-				'func': $scope.inputAll,
+				'func': $scope.inputAll
 			},
 
 			2: {
 				'name': 'Read Players',
 				'hint': 'Read player characters initiation, by input, random to NPCs.',
-				'func': $scope.randomNPC,
+				'func': $scope.randomNPC
 			},
 
 			3: {
 				'name': 'Random All',
 				'hint': 'Generate random to every character.',
-				'func': $scope.randomAll,
-			},
+				'func': $scope.randomAll
+			}
 		};
 
 		// Call the proper function from rollVariations dictionary
 		$scope.roll = function(rollType) {
 			$scope.rollVariations[rollType]['func']();
 			$scope.enableNext = true;
-		}
+		};
 
 		$scope.next = function() {
 			var nextCharacter = collection.next();
@@ -64,16 +67,16 @@
 			$anchorScroll();
 			startTimer();
 			resetTime();
-		}
+		};
 
 		// Counter functions
 		var startTimer = function() {
 			$scope.counting = true;
-		}
+		};
 
 		var resetTime = function() {
 			$scope.timePassed = 0;
-		}
+		};
 
 		var updateTimer = function() {
 			if (!$scope.counting)
@@ -83,7 +86,7 @@
 
 			var formatSeconds = function(seconds) {
 				return (seconds < 10) ?  '0' + seconds : seconds;
-			}
+			};
 
 			var elsapedTime = $scope.timePassed;
 			var elapsedTimeString = '';
@@ -99,17 +102,17 @@
 			}
 
 			setTime(elapsedTimeString);
-		}
+		};
 
 		var setTime = function(timeString) {
 			document.getElementById('counter').innerHTML = timeString;
-		}
+		};
 
 		var initTimer = function() {
 			$scope.counting = false;
 			resetTime();
 			setInterval(updateTimer, 1000);
-		}
+		};
 
 		initTimer();
 		// Counter functions end
@@ -123,7 +126,7 @@
 			var text = 'Would you like to delete this character: (#' + character.id + ') ' + character.name + '?';
 			if (confirm(text))
 				collection.remove(id);
-		}
+		};
 
 		$scope.modifyHealth = function(characterId) {
 			var character = _.find(collection.characters, {'id': characterId});
@@ -137,7 +140,7 @@
 					}
 				}
 			});
-		}
+		};
 
 		var readInitiation = function(characters) {
 			if (!characters.length)
@@ -152,7 +155,7 @@
 					resolve : {
 						character: function() {
 							return characters[index];
-						},
+						}
 					}
 				});
 
@@ -163,7 +166,7 @@
 						collection.order();
 				});
 			}
-		}
+		};
 
 		$scope.changeRollType = function() {
 
@@ -180,7 +183,7 @@
 			modalInstance.result.then(function(rollType) {
 				$scope.rollType = rollType;
 			});
-		}
+		};
 
 		$scope.showAreaDamageForm = function() {
 			var modalInstance = $modal.open({
@@ -196,13 +199,13 @@
 			modalInstance.result.then(function() {
 
 			});
-		}
+		};
 
 		$scope.showCharacterForm = function() {
 
 			var modalInstance = $modal.open({
 				templateUrl: 'addCharacterForm.html',
-				controller: 'addCharacterCtrl',
+				controller: 'addCharacterCtrl'
 			});
 
 			modalInstance.result.then(function(newCharacters) {
@@ -218,7 +221,7 @@
 		$scope.character = character;
 
 		$scope.focusElement = function() {
-		}
+		};
 
 		$scope.done = function() {
 			$modalInstance.close($scope.character);
@@ -249,7 +252,7 @@
           'active': false,
           'health': 0,
           'defense': 0,
-          'npc': true,
+          'npc': true
         };
 
 		$scope.add = function() {
@@ -260,20 +263,20 @@
 
 			$scope.characters.push(angular.copy($scope.character));
 			$scope.message = 'Character added: ' + $scope.character.name + ' (' + $scope.characters.length + ' characters)';
-		}
+		};
 
 		$scope.done = function() {
 			$scope.close();
-		}
+		};
 
 		$scope.close = function() {
 			$modalInstance.close($scope.characters);
-		}
+		};
 
 		var init = function() {
 			if (_.isUndefined($scope.character))
 				$scope.character = angular.copy($scope.defaults);
-		}
+		};
 
 		init();
 	});
@@ -287,32 +290,26 @@
 			$scope.character.health -= change;
 			$modalInstance.close($scope.character);
 		}
-	})
+	});
 
 	app.controller('areaHealthModificationCtrl', function($scope, $modalInstance, characters){
 		$scope.areaDamage = 0;
+		$scope.cloneCharacters = [];
 
-		$scope.characters = characters;
-		$scope.cloneCharacters = angular.copy(characters);
-
-		$scope.toggleDamaged = function (cloneCharacter) {
-			cloneCharacter.damaged = !cloneCharacter.damaged;
-			cloneCharacter.damageHalved = false;
-		};
-
-		$scope.toggleDamageHalved = function (cloneCharacter) {
-			if(cloneCharacter.damaged) {
-				cloneCharacter.damageHalved = !cloneCharacter.damageHalved;
-			}
-		};
+		characters.forEach(function (character, index) {
+			$scope.cloneCharacters[index] = angular.copy(character);
+			$scope.cloneCharacters[index].damaged = "no";
+		});
 
 		$scope.done = function(areaDamage) {
 			$scope.cloneCharacters.forEach(function (cloneCharacter) {
-				var character = _.find($scope.characters, {'id': cloneCharacter.id});
+				var character = _.find(characters, {'id': cloneCharacter.id});
 
-				if(character && cloneCharacter.damaged) {
-					cloneCharacter.damageHalved ?
-						character.health -= Math.floor(areaDamage /2) :
+				switch (cloneCharacter.damaged) {
+					case "half":
+						character.health -= Math.floor(areaDamage /2);
+						break;
+					case "full":
 						character.health -= areaDamage;
 				}
 			});
@@ -322,7 +319,26 @@
 
 		$scope.cancel = function() {
 			$modalInstance.close();
-		}
+		};
+
+		$scope.getAreaDamageContentLabel = function (key) {
+			if(eval(key)) {
+				return "Non Player Characters";
+			} else {
+				return "Player Characters"
+			}
+		};
+
+		$scope.toggleVisibility = function (event) {
+			var tableContent = event.currentTarget.nextElementSibling,
+				cssDisplayProperty = tableContent.style.display;
+
+			if(cssDisplayProperty === "") {
+				tableContent.style.display = "none";
+			} else {
+				tableContent.style.display = "";
+			}
+		};
 	})
 
 })();

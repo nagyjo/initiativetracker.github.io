@@ -1,4 +1,3 @@
-;
 (function() {
 	var id = 0;
 
@@ -15,55 +14,55 @@
 		this.name = obj['name'] || '';
 		this.uniqueName = true;
 		this.displayName = '';
-	}
+	};
 
 	Character.prototype.set = function(key, value) {
 		this[key] = value;
-	}
+	};
 
 	Character.prototype.setDisplayName = function() {
 		var prefix = this.uniqueName ? '' : '(#' + this.id + ')';
 
 		this.displayName = prefix + this.name;
-	}
+	};
 
 	Character.prototype.random = function() {
 		var min = 1;
 		var max = 20;
 		this.rolled_initiation = Math.floor((Math.random() * max) + min);
-	}
+	};
 
 	Character.prototype.calculateInitiation = function() {
 		this.initiation = this.base_initiation + this.rolled_initiation;
-	}
+	};
 
 	Character.prototype.resetOrder = function() {
 		this.initiation_order = 0;
 		this.active = false;
-	}
+	};
 
 	Character.prototype.startTurn = function() {
 		this.active = true;
-	}
+	};
 
 	Character.prototype.endTurn = function() {
 		this.active = false;
-	}
+	};
 
 	CharacterCollection = function() {
 		this.characters = [];
-	}
+	};
 
 	CharacterCollection.prototype.add = function(obj) {
 		this.characters.push(new Character(obj));
 		this.uniqueName();
-	}
+	};
 
 	CharacterCollection.prototype.remove = function(id) {
 		_.remove(this.characters, function(obj) {
 			return obj.id == id;
 		});
-	}
+	};
 
 	CharacterCollection.prototype.next = function() {
 		var current = _.find(this.characters, {'active': true});
@@ -85,7 +84,7 @@
 			next.startTurn();
 
 		return next;
-	}
+	};
 
 	// Set the displayName in each character
 	CharacterCollection.prototype.uniqueName = function(obj) {
@@ -99,14 +98,14 @@
 		});
 
 		_.each(c, function(character){character.setDisplayName();});
-	}
+	};
 
 	CharacterCollection.prototype.resetOrder = function() {
 		_.each(this.characters, function(obj) {
 			obj.calculateInitiation();
 			obj.resetOrder();
 		});
-	}
+	};
 
 	CharacterCollection.prototype.order = function() {
 		this.resetOrder();
@@ -115,7 +114,7 @@
 
 		while (!_.isUndefined(_.find(this.characters, {'initiation_order': 0})))
 			_.maxBy(_.filter(this.characters, {'initiation_order': 0}), 'initiation').set('initiation_order', orderCounter++);
-	}
+	};
 
 
 	// Run ordering after the inputs!
@@ -123,7 +122,7 @@
 		_.each(_.filter(this.characters, {'npc': true}), function(obj) {
 			obj.random();
 		});
-	}
+	};
 
 	CharacterCollection.prototype.randomAll = function() {
 		_.each(this.characters, function(obj) {
