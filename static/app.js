@@ -322,23 +322,11 @@
 		};
 
 		$scope.getAreaDamageContentLabel = function (key) {
-			if(eval(key)) {
+			if(key === "true") {
 				return "Non Player Characters";
 			} else {
 				return "Player Characters"
 			}
 		};
-
-		$scope.toggleVisibility = function (event) {
-			var tableContent = event.currentTarget.nextElementSibling,
-				cssDisplayProperty = tableContent.style.display;
-
-			if(cssDisplayProperty === "") {
-				tableContent.style.display = "none";
-			} else {
-				tableContent.style.display = "";
-			}
-		};
 	})
-
 })();

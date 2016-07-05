@@ -88,8 +88,8 @@ table tr.active{
 table tr.active td{
 	color: white;
 }
-.medium-height {
-	height: 45vh;
+.maximum-height {
+	max-height: 55vh;
 }
 .medium-margin-top {
 	margin-top: 10px;

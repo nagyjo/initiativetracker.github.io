@@ -76,26 +76,26 @@
         Health change (negative if healed):
         <input type="number" data-ng-model="areaDamage" onFocus="this.select();" autofocus>
 
-        <div class="scrollable medium-height">
+        <div class="scrollable maximum-height">
           <div data-ng-repeat="(key, value) in (cloneCharacters | groupBy: 'npc')">
               <table class="charactersInAreaDamage">
-                <thead data-ng-click="toggleVisibility($event)">
+                <thead data-ng-init="areaDamageGroupVisibility[key] = true"  data-ng-click="areaDamageGroupVisibility[key] = !areaDamageGroupVisibility[key]">
                   <tr>
                     <th colspan="4">{{ getAreaDamageContentLabel(key) }}</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody data-ng-show="areaDamageGroupVisibility[key]">
                   <tr data-ng-repeat="character in value">
                     <td>{{ character.displayName }}</td>
                     <td>
-                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="no">Damage Ignored?</label>
+                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="no">None?</label>
                     </td>
                     <td>
-                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="half">Damaged Halved?</label>
+                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="half">Half?</label>
                     </td>
                     <td>
-                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="full">Damage Completed?</label>
+                      <label><input class="radioWithLabel" type="radio" ng-model="character.damaged" value="full">Full?</label>
                     </td>
                   </tr>
                 </tbody>
